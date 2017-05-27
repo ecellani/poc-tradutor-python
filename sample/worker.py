@@ -42,10 +42,9 @@ class Worker:
             translator.translate_unity_brand(doc)
 
             amqp_client.send(self.amqp_ch, 'drupal', dumps(doc))
-            # ch.basic_ack()
+            ch.basic_ack(method.delivery_tag)
         except Exception as e:
             raise e
-
 
 if __name__ == '__main__':
     print "main: worker.py ", os.getpid()
