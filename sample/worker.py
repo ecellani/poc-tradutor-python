@@ -28,13 +28,6 @@ class Worker:
             amqp_client.consumer(self.amqp_conn, 'ponte2', self.on_message)
         except Exception as e:
             raise e
-        finally:
-            if self.amqp_conn:
-                print 'AMQP Connection closed'
-                self.amqp_conn.close()
-            if self.mongo_conn:
-                print 'Mongo Connection closed'
-                self.mongo_conn.close()
 
     def on_message(self, ch, method, properties, body):
         try:
@@ -49,6 +42,7 @@ class Worker:
             translator.translate_unity_brand(doc)
 
             amqp_client.send(self.amqp_ch, 'drupal', dumps(doc))
+            # ch.basic_ack()
         except Exception as e:
             raise e
 

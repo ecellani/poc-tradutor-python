@@ -12,5 +12,5 @@ setup(
     author='Erick Cellani',
     author_email='erick@cellani.com.br',
     packages=find_packages(),
-    install_requires=['pika', 'pymongo', 'bson']
+    install_requires=['pika', 'pymongo']
 )
