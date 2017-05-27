@@ -1,5 +1,9 @@
 # coding=utf-8
+import os
 
+import sys
+
+import signal
 from bson.json_util import dumps
 
 from infrastructure.amqp import client as amqp_client
@@ -57,8 +61,8 @@ def produce():
     try:
         __amqp_conn = amqp_client.connect('localhost')
         i = 0
-        while i < 10000:
-            amqp_client.send(__amqp_conn.channel(), 'ponte2', dumps(__body))
+        while i < 1000:
+            amqp_client.send(__amqp_conn.channel(), 'ponte', dumps(__body))
             i = i + 1
 
     except Exception as e:
@@ -70,8 +74,7 @@ def produce():
 
 
 if __name__ == '__main__':
-    print "main: worker.py"
-    produce()
-else:
-    print "NOT main: worker.py"
+    print '(PID) %r producer.py' % os.getpid()
+    signal.signal(signal.SIGINT, lambda x, y: sys.exit(0))
+    print('Press Ctrl+C to exit')
     produce()
